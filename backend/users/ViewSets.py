@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from .permissions import Is_Owner
+from .permissions import IsOwnerOrAdmin
 
 from .authentication import CustomCookieJWTAuthentication
 
@@ -19,8 +19,9 @@ class UserPagination(PageNumberPagination):
 
 class UsersViewSet(viewsets.ModelViewSet):
     authentication_classes = [ CustomCookieJWTAuthentication]
-    permission_classes = [IsAuthenticated, Is_Owner]
-    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+    queryset = User.objects.order_by('-date_joined')
     serializer_class = UserInfoSerializer
     pagination_class = UserPagination
     filter_backends = [filters.SearchFilter]

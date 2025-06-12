@@ -146,3 +146,15 @@ class LogoutView(APIView):
     response.delete_cookie("refresh_token", samesite="Lax", path="/")
 
     return response
+  
+
+
+
+class RoleOptionsView(APIView):
+    def get(self, request):
+        roles = [
+            {"label": "Admin", "value": "admin"},
+            {"label": "Manager", "value": "manager"},
+            {"label": "User", "value": "user"},
+        ]
+        return Response(roles)

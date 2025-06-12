@@ -14,6 +14,6 @@ def subscription_plans_post_save(sender, instance, created, **kwargs):
     if created:
         print(f"MyModel instance created: {instance}")
         config_details = instance
-        AuditLogs.objects.create()
+        AuditLogs.objects.create(user=sender, action = "Create", details = "Created a new subscription Plan")
 
     print(f"MyModel instance created: {instance}")

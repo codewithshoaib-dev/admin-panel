@@ -33,12 +33,14 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'channels',
 
     'users',
     'subscriptions',
     'notifications',
     'audit',
     'config',
+    'realtime',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+
+ASGI_APPLICATION = 'backend.asgi.application'
 
 
 # Database
@@ -143,7 +148,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
     ],
-    
+
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/minute',
     },
@@ -154,6 +159,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 SIMPLE_JWT = {
     'AUTH_COOKIE': 'access_token', 
     'AUTH_COOKIE_HTTP_ONLY' : True,
@@ -162,7 +168,6 @@ SIMPLE_JWT = {
 
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-
 }
 
 

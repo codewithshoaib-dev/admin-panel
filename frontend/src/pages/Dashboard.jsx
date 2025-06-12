@@ -8,11 +8,30 @@ import { useAuditLogs } from "../hooks/useAuditLogs";
 const Dashboard = () => {
   
 
-  const { data = [] } = useUsers();
-  const { plans = [] } = useSubscriptionPlans();
-  const { notifications = [] } = useNotifications();
-  const { logs = [] } = useAuditLogs();
+const data = [
+  { id: 1, name: 'Ayaan Malik', email: 'ayaan@example.com', role: 'Admin', isActive: true, createdAt: '2025-05-01T12:30:00Z' },
+  { id: 2, name: 'Hira Qureshi', email: 'hira@example.com', role: 'User', isActive: false, createdAt: '2025-05-02T09:15:00Z' },
+  { id: 3, name: 'Zayan Shah', email: 'zayan@example.com', role: 'Manager', isActive: true, createdAt: '2025-05-03T17:45:00Z' }
+];
 
+
+const plans = [
+  { id: 1, name: 'Starter', price: 19, currency: 'USD', isActive: true, features: ['Basic Analytics', 'Email Support'] },
+  { id: 2, name: 'Pro', price: 49, currency: 'USD', isActive: true, features: ['Advanced Analytics', 'Priority Support', 'Custom Domains'] },
+  { id: 3, name: 'Enterprise', price: 99, currency: 'USD', isActive: false, features: ['Dedicated Manager', 'API Access', 'Unlimited Users'] }
+];
+
+const notifications = [
+  { id: 1, message: 'Your subscription will renew in 3 days.', type: 'info', createdAt: '2025-06-10T14:00:00Z', isRead: false },
+  { id: 2, message: 'New user signed up: Hira Qureshi.', type: 'success', createdAt: '2025-06-11T09:45:00Z', isRead: true },
+  { id: 3, message: 'Payment failed for user Zayan Shah.', type: 'error', createdAt: '2025-06-12T08:20:00Z', isRead: false }
+];
+
+const logs = [
+  { id: 1, action: 'Login', performedBy: 'Ayaan Malik', target: null, createdAt: '2025-06-12T07:50:00Z' },
+  { id: 2, action: 'Updated Subscription Plan', performedBy: 'Zayan Shah', target: 'Pro Plan', createdAt: '2025-06-11T18:10:00Z' },
+  { id: 3, action: 'Deleted User', performedBy: 'Ayaan Malik', target: 'Hira Qureshi', createdAt: '2025-06-10T16:30:00Z' }
+];
 
 
 
