@@ -13,7 +13,7 @@ const Layout = () => {
   <div className="flex flex-col flex-1 overflow-x-hidden min-h-0">
     <TopBar onToggleSidebar={() => setSidebarOpen(true)} />
 
-    <main className={`flex-1 overflow-auto bg-auto  p-6 min-h-0 md:ml-64` }>
+    <main className={`flex-1 overflow-auto bg-auto  min-h-0 md:ml-64` }>
       <Outlet />
     </main>
   </div>

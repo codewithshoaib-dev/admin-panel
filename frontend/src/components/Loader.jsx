@@ -1,17 +1,12 @@
-
-
 function Loader() {
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-[300px] animate-opacity"
+      className="flex flex-col items-center justify-center min-h-[300px] text-neutral-400"
       role="status"
       aria-label="Loading"
     >
-      <div className="relative flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-        <div className="absolute w-5 h-5 bg-indigo-500 rounded-full"></div>
-      </div>
-      <p className="mt-4 text-base text-gray-600">Loading, please wait...</p>
+      <div className="w-14 h-14 border-4 border-neutral-700 border-t-teal-500 rounded-full animate-spin" />
+      <p className="mt-5 text-sm text-neutral-500">Loading, please wait…</p>
     </div>
   );
 }

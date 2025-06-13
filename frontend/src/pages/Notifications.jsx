@@ -5,6 +5,10 @@ import { useNotifications } from "../hooks/useNotifications";
 
 import { Select } from "../components/ui/SortSelect";
 
+import Loader from "../components/Loader";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { NoData } from "../components/NoData";
+
 export default function Notifications() {
     console.log("Notifications mounted")
 
@@ -28,9 +32,9 @@ export default function Notifications() {
   };
   
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data</div>;
-  if (!data) return <div>No data available</div>;
+  if (isLoading) return <Loader/>
+  if (isError) return <ErrorMessage message="Error loading Notifications"/>
+  if (!data) return <NoData message="No Notifications to show"/>
     
   const filteredNotifications = data.filter((n) =>
     activeSection === "unread" ? !n.read : n.read
@@ -74,7 +78,7 @@ export default function Notifications() {
 
       
       {filteredNotifications.length === 0 ? (
-        <p className="text-gray-500 text-sm">No notifications.</p>
+        <NoData message="No notifications to show"/>
       ) : (
         <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
           {filteredNotifications.map((notification) => (

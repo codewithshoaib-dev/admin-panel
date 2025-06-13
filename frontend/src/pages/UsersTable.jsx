@@ -2,7 +2,9 @@ import { useState, useMemo } from "react";
 import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
 import apiClient from "../configs/axios";
 import { useUsers } from "../hooks/useUsers";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { useroleOptions } from "../hooks/useroleOptions"
+
 
 import UserFormModal from "../components/users/UserFormModal";
 import SearchBar from "../components/utility/SearchBar";
@@ -12,6 +14,7 @@ import PaginationControls from "../components/utility/PaginationControls";
 import { getUserColumns } from "../components/users/UserColumn";
 import { ErrorMessage } from "../components/ErrorMessage";
 
+import Loader from "../components/Loader";
 import ConfirmActionToast from "../components/utility/ConfirmActionToast";
 
 const UsersTable = () => {
@@ -28,15 +31,19 @@ const UsersTable = () => {
   const { data, isLoading, isError, refetch } = useUsers(page, searchQuery);
   const totalPages = Math.max(1, Math.ceil((data?.count || 0) / 10));
 
+  const { data: roleOptions, isLoading: isRolesLoading, isError: isRolesError } = useroleOptions();
+
 
   
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value);
-    if(searchInput == "") {
-      setSearchQuery(searchInput)
-      refetch()
-    }
+ const handleSearchChange = (e) => {
+  const value = e.target.value;
+  setSearchInput(value);
+  if (value === "") {
+    setSearchQuery("");
+    refetch();
   }
+};
+
 
   const handleSearchSubmit = () => {
     setSearchQuery(searchInput);
@@ -60,6 +67,7 @@ const UsersTable = () => {
     setFormValues({ username: "", email: "", role: "", password: "" });
     setFormErrors({});
     setIsModalOpen(true);
+
   };
 
   const handleFormChange = (e) => {
@@ -117,7 +125,7 @@ const UsersTable = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <LoaderIcon />;
+  if (isLoading) return <Loader />;
   if (isError) return <ErrorMessage message="Error loading users" />;
 
   return (
@@ -132,13 +140,13 @@ const UsersTable = () => {
       onCancel={() => setIsModalOpen(false)}
       onSubmit={handleFormSubmit}
       isSubmitting={isSubmitting}
+      roleOptions={!currentUser ? roleOptions : []}
     />
 
     
     <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
       <h2 className="text-3xl font-bold text-gray-800 text-center sm:text-left">Users</h2>
 
-      
       <div className="w-full sm:w-auto">
         <SearchBar
           searchInput={searchInput}

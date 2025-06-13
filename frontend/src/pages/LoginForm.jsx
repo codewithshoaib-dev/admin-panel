@@ -55,7 +55,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             type="email"
-            placeholder="Email"
+            placeholder="Enter your Email"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${
                 errors.email ? "border-red-500" : "border-gray-300"
             }`}
@@ -72,7 +72,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             type="password"
-            placeholder="Password"
+            placeholder="Enter your secret Password"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${
                 errors.password ? "border-red-500" : "border-gray-300"
             }`}

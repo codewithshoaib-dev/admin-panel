@@ -15,8 +15,9 @@ import { Toaster } from 'react-hot-toast';
 import Loader from './components/Loader'
 import Notifications from './pages/Notifications'
 
-
+import ContentNotFound from './pages/NotFound'
 import AuditLogs from './pages/AuditLogs'
+import Settings from './pages/Settings'
 
 function App() {
    
@@ -26,16 +27,18 @@ function App() {
     
     <Routes>
       <Route path='login' element={<Login/>} />
-      
       <Route path='register' element={<Register/>} />
-      
+       <Route path='' element={<Loader/>}/>
+
       <Route path='*' element={<ProtectedRoute/>}>
         <Route path='dashboard' element={<Layout />}>
         <Route path='users' element={<UsersTable/>} />
         <Route path='subscriptions' element={<SubscriptionsTable/>}/>
         <Route path='notifications' element={<Notifications/>}/>
         <Route path='auditlogs' element={<AuditLogs/>}/>
+        <Route path='settings' element={<Settings/>}/>
         <Route path='' element={<Dashboard/>}/>
+        <Route path='*' element={<ContentNotFound/>}/>
         </Route>
       </Route>
     

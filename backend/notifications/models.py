@@ -13,6 +13,6 @@ class Notifications(models.Model):
 
     title = models.CharField(max_length=100)
     message = models.TextField(null=True, blank=True)
-    read = models.BooleanField()
+    read = models.BooleanField(default=False)
     send_at = models.DateTimeField(auto_now_add=True)
     

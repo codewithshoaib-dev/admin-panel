@@ -1,6 +1,6 @@
 import React from "react";
 
-const roleOptions = ["ADMIN", "OWNER", "STAFF"];
+
 
 export default function UserFormModal({
   isOpen,
@@ -10,8 +10,10 @@ export default function UserFormModal({
   onChange,
   onCancel,
   onSubmit,
+  roleOptions,
 }) {
   if (!isOpen) return null;
+  console.log(roleOptions)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-100 bg-opacity-40">
@@ -70,7 +72,7 @@ export default function UserFormModal({
             >
               <option value="">Select role</option>
               {roleOptions.map((role) => (
-                <option key={role} value={role}>{role}</option>
+                <option key={role.id} value={role.value}>{role.label}</option>
               ))}
             </select>
             {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}

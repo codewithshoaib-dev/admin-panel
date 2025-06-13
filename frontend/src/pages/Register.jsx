@@ -24,7 +24,6 @@ const Register = () => {
       });
 
       if (response.data.status === 'success') {
-        
       } 
     } catch (err) {
       if (err.response?.data.errors) {
@@ -57,7 +56,7 @@ const Register = () => {
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             type="text"
-            placeholder="Username"
+            placeholder="Pick a username"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${
                 errors.username ? "border-red-500" : "border-gray-300"
             }`}
@@ -72,7 +71,7 @@ const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             type="email"
-            placeholder="Email"
+            placeholder="Enter your Email"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${
                 errors.email ? "border-red-500" : "border-gray-300"
             }`}
@@ -88,7 +87,7 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             type="password"
-            placeholder="Password"
+            placeholder="Enter a Password"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none ${
                 errors.password ? "border-red-500" : "border-gray-300"
             }`}

@@ -153,8 +153,8 @@ class LogoutView(APIView):
 class RoleOptionsView(APIView):
     def get(self, request):
         roles = [
-            {"label": "Admin", "value": "admin"},
-            {"label": "Manager", "value": "manager"},
-            {"label": "User", "value": "user"},
+            {"id" : 1, "label": "Owner", "value": "OWNER"},
+            {"id" : 2, "label": "Admin", "value": "ADMIN"},
+            {"id" : 3, "label": "Staff", "value": "STAFF"},
         ]
         return Response(roles)

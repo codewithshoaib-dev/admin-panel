@@ -52,7 +52,7 @@ export default function AuditLogs() {
               <h4 className="font-medium text-gray-800">{log.action}</h4>
               <p className="text-sm text-gray-600">
                 By <span className="font-medium">{log.user}</span> on{" "}
-                <span className="text-gray-500">{ console.log(log.created_at) }{  format(new Date(log.created_at), "PPPpp")}</span>
+                <span className="text-gray-500">{  format(new Date(log.created_at), "PPPpp")}</span>
               </p>
               {log.details && <p className="text-xs text-gray-500 mt-1">{log.details}</p>}
             </div>
