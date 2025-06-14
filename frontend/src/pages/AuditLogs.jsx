@@ -9,22 +9,24 @@ import {ErrorMessage} from "../components/ErrorMessage"
 
 
 export default function AuditLogs() {
-  const { data, isError, isLoading } = useAuditLogs();
-  const [sortValue, setSortValue] = useState("newest");
+  
+  const [sortValue, setSortValue] = useState("-created_at");
+
+  const { data, isError, isLoading } = useAuditLogs(sortValue);
 
  
   const sortOptions = [
-    { value: "newest", label: "Newest First" },
-    { value: "oldest", label: "Oldest First" },
-    { value: "user_asc", label: "User (A-Z)" },
+    { value: "-created_at", label: "Newest First" },
+    { value: "created_at", label: "Oldest First" },
+    
   ];
 
   const eventTypeIcons = {
-    created: <PlusCircle className="text-green-500 w-5 h-5" />,
-    updated: <Edit3 className="text-blue-500 w-5 h-5" />,
-    deleted: <Trash2 className="text-red-500 w-5 h-5" />,
-    error: <AlertTriangle className="text-yellow-500 w-5 h-5" />,
-    login: <User className="text-purple-500 w-5 h-5" />,
+    Create: <PlusCircle className="text-green-500 w-5 h-5" />,
+    Update: <Edit3 className="text-blue-500 w-5 h-5" />,
+    Delete: <Trash2 className="text-red-500 w-5 h-5" />,
+    Error: <AlertTriangle className="text-yellow-500 w-5 h-5" />,
+    Login: <User className="text-purple-500 w-5 h-5" />,
   };
 
 

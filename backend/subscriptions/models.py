@@ -13,6 +13,7 @@ class SubscriptionPlans(models.Model):
     billing_cycle = models.CharField(max_length=20, choices=[('MONTHLY', 'Monthly'), ('YEARLY','Yearly')])
     features = models.JSONField()
     is_active = models.BooleanField()
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_by', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

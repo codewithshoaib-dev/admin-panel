@@ -6,9 +6,15 @@ from users.permissions import IsOwnerOrAdmin
 from users.authentication import CustomCookieJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+
+from audit.models import AuditLogs
+
+from rest_framework import status
 
 from .models import SubscriptionPlans, UserSubscription
 from .serializers import SubscriptionPlansSerializer, UserSubscriptionSerializer
+
 
 
 class SubscriptionsPagination(PageNumberPagination):
@@ -35,6 +41,20 @@ class SubscriptionPlansViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAuthenticated(), IsOwnerOrAdmin()]
         return []
+    
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance_name = instance.name 
+        instance.delete()
+
+        AuditLogs.objects.create(
+            user=request.user,
+            action="Delete",
+            details=f"Deleted subscription plan: {instance_name}"
+        )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
   

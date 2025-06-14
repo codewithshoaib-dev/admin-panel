@@ -17,7 +17,8 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    ordering_fields = ['created_at']      
+    ordering_fields = ['read' 'send_at']
+    oordering = ['sent_at']      
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:

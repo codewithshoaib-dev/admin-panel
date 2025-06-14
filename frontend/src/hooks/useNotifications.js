@@ -2,16 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import apiClient from "../configs/axios";
 
 
-const fetchNotifications = async () => {
-  console.log("fetch notification component mounted")
-  const res = await apiClient.get("notifications");
 
-  return res.data;
-};
+export const useNotifications = (ordering) => {
+  
+  return useQuery({
 
-export const useNotifications = () =>
-  useQuery({
-    queryKey: ["notifications"],
-    queryFn: fetchNotifications,
+    queryKey: ["notifications", ordering],
+    queryFn: async () => {
+      const res = await apiClient.get("notifications", {
+        params: {
+          ordering,
+        },
+      });
+      
+      return res.data;
+      
+    },
     keepPreviousData: true,
+    refetchOnWindowFocus: false,
   });
+};

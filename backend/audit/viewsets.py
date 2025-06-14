@@ -20,3 +20,5 @@ class AuditLogsViewSet(viewsets.ModelViewSet):
     serializer_class = AuditLogsSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ['created_at', 'action'] 
+    ordering = ['-created_at']

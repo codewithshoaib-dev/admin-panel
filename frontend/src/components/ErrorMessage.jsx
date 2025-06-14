@@ -1,6 +1,6 @@
 export function ErrorMessage({ message = "Oops! Something went wrong." }) {
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-red-50 border border-red-300 rounded-lg text-red-700 max-w-md mx-auto">
+    <div className="flex flex-col items-center justify-center p-12 m-4 bg-red-50 border border-red-300 rounded-lg text-red-700 max-w-md mx-auto">
       <svg
         className="w-10 h-10 mb-2"
         fill="none"

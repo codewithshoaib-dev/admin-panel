@@ -110,7 +110,7 @@ const SubscriptionsTable = () => {
       message="Are you sure you want to permanently delete this Subscription?"
       confirmText="Yes, delete"
       onConfirm={async () => {
-        const res = await apiClient.delete(`/users/${id}/`);
+        const res = await apiClient.delete(`/subscription/plans/${id}/`);
         if (res.status !== 204) {
           throw new Error("Delete failed");
         }
