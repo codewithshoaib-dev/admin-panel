@@ -3,7 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
 from users.permissions import IsOwnerOrAdmin
-from users.authentication import CustomCookieJWTAuthentication
+from users.JWTAuthentication import CustomCookieJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Notifications
@@ -17,7 +17,8 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    ordering_fields = ['read' 'send_at']
+    filterset_fields = ['read']
+    ordering_fields = ['send_at']
     oordering = ['sent_at']      
 
     def get_permissions(self):

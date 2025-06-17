@@ -10,6 +10,20 @@ from django.contrib.auth import get_user_model
 
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserInfoSerializer
 
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.urls import reverse
+
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.hashers import make_password
+
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+
+
+token_generator = PasswordResetTokenGenerator()
+
 
 User = get_user_model()
 
@@ -76,6 +90,7 @@ class UserLoginView(APIView):
         
     
 class UserInfoView(APIView):
+   
    authentication_classes = [CustomCookieJWTAuthentication]
    permission_classes=[permissions.IsAuthenticated]
    
@@ -87,13 +102,14 @@ class UserInfoView(APIView):
 
 
 class CookieTokenRefreshView(APIView):
-    authentication_classes = [CustomCookieJWTAuthentication]
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh_token')
+       
 
         if refresh_token is None:
+            print(refresh_token, "refresh token")
             return Response({
                 'status': 'error',
                 'message': 'Refresh token missing.'
@@ -103,13 +119,15 @@ class CookieTokenRefreshView(APIView):
             refresh = RefreshToken(refresh_token)
             new_refresh_token = str(refresh)
             new_access_token = str(refresh.access_token)
-
+           
         except Exception:
+            print(Exception)
+           
             return Response({
                 'status': 'error',
                 'message': 'Invalid refresh token.'
             }, status=status.HTTP_401_UNAUTHORIZED)
-
+        print('It works?')
         response = Response({
             'status': 'success',
             'message': 'Token refreshed successfully.'
@@ -158,3 +176,41 @@ class RoleOptionsView(APIView):
             {"id" : 3, "label": "Staff", "value": "STAFF"},
         ]
         return Response(roles)
+
+
+
+class PasswordResetRequestView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = token_generator.make_token(user)
+            print("uid:", uid, "token:", token)
+            reset_link = f"localhost:5173/reset-password/{uid}/{token}/"
+
+            send_mail(
+                'Password Reset',
+                f'Click the link to reset your password: {reset_link}',
+                'noreply@domain.com',
+                [email],
+                fail_silently=False,
+            )
+
+        return Response({'message': 'If the email exists, a reset link was sent.'})
+
+
+
+
+class PasswordResetConfirmView(APIView):
+    def post(self, request, uidb64, token):
+        password = request.data.get('password')
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.filter(pk=uid).first()
+
+        if user and token_generator.check_token(user, token):
+            user.password = make_password(password)
+            user.save()
+            return Response({'message': 'Password successfully reset.'})
+        return Response({'error': 'Invalid token.'}, status=400)

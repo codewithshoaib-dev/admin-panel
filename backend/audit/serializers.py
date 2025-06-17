@@ -2,11 +2,17 @@ from rest_framework import serializers
 
 from .models import AuditLogs
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 
 class AuditLogsSerializer(serializers.ModelSerializer):
 
     created_at = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S.%fZ")
+    
+    user = serializers.CharField(source='user.username')
 
     class Meta:
         model = AuditLogs

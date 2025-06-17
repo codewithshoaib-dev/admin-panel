@@ -12,7 +12,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'password',
-            'role',
             
         ]
 
@@ -50,6 +49,17 @@ class UserLoginSerializer(serializers.Serializer):
     
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+            'role',
+            'is_superuser',
+        ]
+
+class UserManagingSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -65,9 +75,8 @@ class UserInfoSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         if value is None:
             raise serializers.ValidationError('Email required.')
-        existing_email = User.objects.filter(email=value).first()
-        if existing_email:
-            raise serializers.ValidationError('Cannot use that email')
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Cannot use that email.')
         return value
 
     def create(self, validated_data):

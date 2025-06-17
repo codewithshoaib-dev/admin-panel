@@ -140,7 +140,7 @@ const UsersTable = () => {
       onCancel={() => setIsModalOpen(false)}
       onSubmit={handleFormSubmit}
       isSubmitting={isSubmitting}
-      roleOptions={!currentUser ? roleOptions : []}
+      roleOptions={roleOptions}
     />
 
     

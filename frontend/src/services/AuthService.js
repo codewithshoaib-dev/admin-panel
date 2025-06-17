@@ -1,10 +1,9 @@
 import apiClient from "../configs/axios";
-import toast  from "react-hot-toast";
-
+import toast from "react-hot-toast";
 
 let isTokenRefreshing = false;
+let refreshPromise = null;
 let requestQueue = [];
-
 
 export const logout = async (navigate) => {
   try {
@@ -15,36 +14,39 @@ export const logout = async (navigate) => {
     console.error(err);
     toast.error("Failed to logout. Please try again");
   }
-}
+};
 
-const resolveQueuedRequests = (error = null) => {
-  requestQueue.forEach(({ resolve, reject }) => {
-    error ? reject(error) : resolve();
+const processQueue = (error = null) => {
+  requestQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve();
+    }
   });
   requestQueue = [];
 };
 
-export const handleTokenRefresh = async (apiClient, originalConfig) => {
+export const refreshAccessToken = () => {
   if (isTokenRefreshing) {
-    return new Promise((resolve, reject) => {
-      requestQueue.push({
-        resolve: () => resolve(),
-        reject,
-      });
-    });
+    return refreshPromise;
   }
 
   isTokenRefreshing = true;
 
-  try {
-    await apiClient.post("token/refresh", {}, { withCredentials: true });
-    resolveQueuedRequests();
-  } catch (error) {
-    resolveQueuedRequests(error);
-    throw error;
-  } finally {
-    isTokenRefreshing = false;
-  }
+  refreshPromise = apiClient
+    .post("token/refresh", {}, { withCredentials: true })
+    .then(() => {
+      processQueue();
+    })
+    .catch((err) => {
+      console.error("Token refresh failed:", err);
+      processQueue(err);
+    })
+    .finally(() => {
+      isTokenRefreshing = false;
+      refreshPromise = null;
+    });
+
+  return refreshPromise;
 };
-
-

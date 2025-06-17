@@ -3,12 +3,12 @@ from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from users.permissions import IsOwnerOrAdmin
-from users.authentication import CustomCookieJWTAuthentication
+from users.JWTAuthentication import CustomCookieJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from audit.models import AuditLogs
+from audit.CreateAuditLogs import CreateAuditLog
 
 from rest_framework import status
 
@@ -31,7 +31,7 @@ class SubscriptionPlansViewSet(viewsets.ModelViewSet):
     pagination_class = SubscriptionsPagination
     search_fields = ['name']
 
-
+ 
     def get_authenticators(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
            return [CustomCookieJWTAuthentication()]
@@ -48,18 +48,18 @@ class SubscriptionPlansViewSet(viewsets.ModelViewSet):
         instance_name = instance.name 
         instance.delete()
 
-        AuditLogs.objects.create(
+        CreateAuditLog(
             user=request.user,
             action="Delete",
             details=f"Deleted subscription plan: {instance_name}"
-        )
+           )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+
+        
   
-
-
 
 class UserSubscriptionViewSet(viewsets.ModelViewSet):
     queryset = UserSubscription.objects.all()

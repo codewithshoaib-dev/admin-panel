@@ -13,10 +13,12 @@ env = environ.Env()
 env.read_env(BASE_DIR / '.env' )
 
 
-SECRET_KEY =  env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = env('DEBUG')
+
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
@@ -34,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'channels',
+    'django_filters',
 
     'users',
     'subscriptions',
@@ -166,8 +169,8 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SECURE' : False,
     'AUTH_COOKIE_SAMESITE': 'Lax',
 
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
 
@@ -180,3 +183,8 @@ CORS_TRUSTED_ORIGINS = [
 
 
 CORS_ALLOW_CREDENTIALS=True
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'noreply@domain.com'

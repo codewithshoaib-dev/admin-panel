@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
   const confirmLogout = () => {
     toast.custom((t) => (
       <div
-        className={`flex items-center gap-4 p-4 rounded-lg shadow-lg bg-neutral-800 border border-neutral-700 text-white ${
+        className={`flex items-center gap-4 p-4 rounded-lg shadow-lg bg-white border border-neutral-200 text-neutral-900 ${
           t.visible ? "animate-enter" : "animate-leave"
         }`}
       >
@@ -28,13 +28,13 @@ import { useNavigate } from "react-router-dom";
                 toast.dismiss(t.id);
                 logout(navigate);
               }}
-              className="px-3 py-1 text-sm bg-teal-500 hover:bg-teal-600 rounded"
+              className="px-3 py-1 text-sm bg-teal-500 hover:bg-teal-600 text-white rounded"
             >
               Yes
             </button>
             <button
               onClick={() => toast.remove(t.id)}
-              className="px-3 py-1 text-sm bg-neutral-600 hover:bg-neutral-500 rounded"
+              className="px-3 py-1 text-sm bg-neutral-200 hover:bg-neutral-300 text-neutral-700 rounded"
             >
               Cancel
             </button>
@@ -45,19 +45,19 @@ import { useNavigate } from "react-router-dom";
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 bg-neutral-900 border-b border-neutral-800 md:ml-64">
+    <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-neutral-200 md:ml-64">
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}
-          className="md:hidden text-xl p-2 rounded-lg bg-neutral-800 text-white"
+          className="md:hidden text-xl p-2 rounded-lg bg-neutral-100 text-neutral-700"
         >
           <FaBars />
         </button>
-        <div className="text-lg font-semibold text-white tracking-tight">Dashboard</div>
+        <div className="text-lg font-semibold text-neutral-900 tracking-tight">Dashboard</div>
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="text-md text-white">{user?.username || "Ghost"}</span>
+        <span className="text-md text-neutral-700">{user?.username || "Ghost"}</span>
         <button
           onClick={confirmLogout}
           className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
@@ -70,4 +70,4 @@ import { useNavigate } from "react-router-dom";
   );
 };
 
-export default TopBar
+export default TopBar;

@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
 from users.permissions import IsOwnerOrAdmin
-from users.authentication import CustomCookieJWTAuthentication
+from users.JWTAuthentication import CustomCookieJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import AuditLogs
@@ -20,5 +20,6 @@ class AuditLogsViewSet(viewsets.ModelViewSet):
     serializer_class = AuditLogsSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    ordering_fields = ['created_at', 'action'] 
+    filterset_fields = ['action']
+    ordering_fields = ['created_at'] 
     ordering = ['-created_at']

@@ -1,13 +1,14 @@
 from rest_framework import viewsets, filters
 from django.contrib.auth import get_user_model
-from .serializers import UserInfoSerializer
+from .serializers import UserManagingSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOrAdmin
 
-from .authentication import CustomCookieJWTAuthentication
+from .JWTAuthentication import CustomCookieJWTAuthentication
+
 
 User = get_user_model()
 
@@ -20,9 +21,9 @@ class UserPagination(PageNumberPagination):
 class UsersViewSet(viewsets.ModelViewSet):
     authentication_classes = [ CustomCookieJWTAuthentication]
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
-
+    
     queryset = User.objects.order_by('-date_joined')
-    serializer_class = UserInfoSerializer
+    serializer_class = UserManagingSerializer
     pagination_class = UserPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']

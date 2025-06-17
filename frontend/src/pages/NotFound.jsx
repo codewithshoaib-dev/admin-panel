@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Ghost } from "lucide-react";
 
-const ContentNotFound = ({ message = "We couldn’t find the content you’re looking for." }) => {
+const ContentNotFound = ({ message = "We couldn’t find the page you’re looking for." }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white p-6">
       <Ghost className="w-24 h-24 text-indigo-400 mb-4 animate-bounce" />

@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard'
 import Layout from './components/Layout.jsx/Layout'
 import SubscriptionsTable from './pages/SubscriptionTable'
 
+import AdminRoutes from './components/AdminRoutes'
 import UsersTable from './pages/UsersTable'
 import { Toaster } from 'react-hot-toast';
 import Loader from './components/Loader'
@@ -18,6 +19,12 @@ import Notifications from './pages/Notifications'
 import ContentNotFound from './pages/NotFound'
 import AuditLogs from './pages/AuditLogs'
 import Settings from './pages/Settings'
+
+import ForgotPassword from './pages/ForgetPassword'
+
+import ResetPassword from './pages/ResetPassword'
+
+import UnauthorizedPage from './pages/NotAuthorized'
 
 function App() {
    
@@ -28,9 +35,12 @@ function App() {
     <Routes>
       <Route path='login' element={<Login/>} />
       <Route path='register' element={<Register/>} />
-       <Route path='' element={<Loader/>}/>
+      <Route path='forget-password' element={<ForgotPassword/>} />
+      <Route path='reset-password' element={<ResetPassword/>} />
+      <Route path='unauthorized' element={<UnauthorizedPage/>} />
+      
 
-      <Route path='*' element={<ProtectedRoute/>}>
+      <Route path='*' element={<AdminRoutes/>}>
         <Route path='dashboard' element={<Layout />}>
         <Route path='users' element={<UsersTable/>} />
         <Route path='subscriptions' element={<SubscriptionsTable/>}/>

@@ -16,4 +16,5 @@ export const useSubscriptionPlans = (page, search) =>
       return res.data;
     },
     keepPreviousData : true,
+    refetchOnWindowFocus: false,
   });

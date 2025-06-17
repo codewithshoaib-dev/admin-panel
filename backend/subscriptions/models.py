@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+import uuid
 
 
 User = get_user_model()
 
 class SubscriptionPlans(models.Model):
 
-    name = models.CharField(max_length=150)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=150, db_index=True)
     description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     billing_cycle = models.CharField(max_length=20, choices=[('MONTHLY', 'Monthly'), ('YEARLY','Yearly')])
@@ -20,6 +21,7 @@ class SubscriptionPlans(models.Model):
 
 
 class UserSubscription(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribed_user')
     plan = models.ForeignKey(SubscriptionPlans, on_delete=models.CASCADE, related_name='user_subscription')
     start_date = models.DateTimeField()
