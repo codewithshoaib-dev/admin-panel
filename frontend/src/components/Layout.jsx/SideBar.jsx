@@ -64,7 +64,7 @@ const SideBar = ({ open, setOpen }) => {
 const SidebarContent = ({ onClose, isActive }) => (
   <div className="flex flex-col h-full">
     <div className="p-5 flex items-center justify-between border-b border-neutral-200">
-      <span className="text-xl font-bold tracking-tight">My SaaS</span>
+      <span className="text-xl font-bold tracking-tight">Admin Controls</span>
       {onClose && (
         <button onClick={onClose} className="text-2xl text-neutral-400 md:hidden">
           &times;

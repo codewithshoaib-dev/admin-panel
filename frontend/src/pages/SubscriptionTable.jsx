@@ -82,7 +82,7 @@ const SubscriptionsTable = () => {
     setIsSubmitting(true);
     try {
       if (currentSubscription) {
-        await apiClient.put(`/subscription/plans/${currentSubscription.id}/`, formValues);
+        await apiClient.patch(`/subscription/plans/${currentSubscription.id}/`, formValues);
         toast.success("Subscription updated!");
       } else {
         await apiClient.post("/subscription/plans/", formValues);

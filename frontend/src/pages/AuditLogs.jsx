@@ -36,40 +36,54 @@ const eventTypeIcons = {
   if (!data?.length) return <NoData/>;
 
 
-  return (
-    <div className="max-w-4xl mx-auto p-6">
-  <div className="flex items-center justify-between mb-6">
-    <h2 className="text-xl font-semibold text-gray-800">Audit Logs</h2>
-    <Select value={sortValue} onValueChange={setSortValue} options={sortOptions} placeholder="Sort by" />
-  </div>
+ return (
+  <div className="max-w-4xl mx-auto p-6">
+    <div className="flex items-center justify-between mb-8">
+      <h2 className="text-2xl font-bold text-gray-900">Audit Logs</h2>
+      <Select
+        value={sortValue}
+        onValueChange={setSortValue}
+        options={sortOptions}
+        placeholder="Sort by"
+      />
+    </div>
 
-  <div className="flex flex-col space-y-4">
-    {data.map((log) => (
-      <div
-        key={log.id}
-        className="flex items-start gap-3 p-3 rounded-2xl hover:bg-gray-50 transition group"
-      >
-        <div className="p-2 rounded-full bg-gray-100 group-hover:bg-gray-200 transition">
-          {eventTypeIcons[log.action] || <AlertTriangle className="text-gray-400 w-5 h-5" />}
-        </div>
-
-        <div className="flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h4 className="font-medium text-gray-800">{log.action}</h4>
-            <span className="text-xs text-gray-500">{format(new Date(log.created_at), "PPPpp")}</span>
+    <div className="flex flex-col space-y-4">
+      {data.map((log) => (
+        <div
+          key={log.id}
+          className="flex items-start gap-4 p-5 rounded-2xl shadow-sm border bg-white hover:bg-gray-50 transition group"
+        >
+          <div className="p-3 rounded-full bg-gray-100 group-hover:bg-gray-200 transition">
+            {eventTypeIcons[log.action] || (
+              <AlertTriangle className="text-gray-400 w-5 h-5" />
+            )}
           </div>
 
-          <p className="text-sm text-gray-600 mt-0.5">
-            By <span className="font-medium">{log.user}</span>
-          </p>
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h4 className="text-lg font-semibold text-gray-800">
+                {log.action}
+              </h4>
+              <span className="text-sm text-gray-500">
+                {format(new Date(log.created_at), "PPPpp")}
+              </span>
+            </div>
 
-          {log.details && <p className="text-xs text-gray-500 mt-1">{log.details}</p>}
+            <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+              By <span className="font-medium">{log.user}</span>
+            </p>
+
+            {log.details && (
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                {log.details}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
-    ))}
+      ))}
+    </div>
   </div>
-</div>
+);
 
-
-  );
 }

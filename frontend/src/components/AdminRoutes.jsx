@@ -13,7 +13,9 @@ function AdminRoutes() {
   if (!user) return <Navigate to="/login"/>;
  
 
-  if (!user.role === 'OWNER'|| !user.role === 'ADMIN' || !user.is_superuser) return <Navigate to="/unauthorized" />
+  if (user.role !== 'OWNER' && user.role !== 'ADMIN' && !user.is_superuser)
+  return <Navigate to="/unauthorized" />
+
 
   return <Outlet />;
 }

@@ -26,7 +26,7 @@ import ResetPassword from './pages/ResetPassword'
 
 import UnauthorizedPage from './pages/NotAuthorized'
 
-import MRRCard from './MRRcard'
+
 
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
     
     <Routes>
       <Route path='login' element={<Login/>} />
-      <Route path='' element={<MRRCard/>} />
+     
       <Route path='register' element={<Register/>} />
       <Route path='forgot-password' element={<ForgotPassword/>} />
       <Route path='reset-password/:uid/:token' element={<ResetPassword/>} />

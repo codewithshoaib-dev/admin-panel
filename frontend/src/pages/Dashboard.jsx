@@ -14,66 +14,73 @@ const Dashboard = () => {
   const [plans, setPlans] = useState([]);
   const [logs, setLogs] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [stats2, setStats2] = useState()
  
-  const stats2 = useDashboardStatsSocket("ws://localhost:8000/ws/dashboard_stats/")
+  const websocket_stats = useDashboardStatsSocket("ws://localhost:8000/ws/dashboard_stats/")
 
   
 useEffect(() => {
-  if (stats2) {
-    console.log("Updated stats2:", stats2)
+  if (websocket_stats) {
+    setStats2(websocket_stats)
+    console.log("Updated stats2:", websocket_stats)
   }
-}, [stats2])
+}, [websocket_stats])
 
   useEffect(() => {
-    setStats({
-      totalUsers: 250,
-      activeSubscribers: 180,
-      mrr: 4800,
-      newSignupsLast7Days: 22,
-      churnRate: 3.2,
-      unreadErrors: 5
-    });
+  if (!stats2) return;
 
-    setUserGrowth([
-      { date: "Jun 6", count: 5 },
-      { date: "Jun 7", count: 8 },
-      { date: "Jun 8", count: 12 },
-      { date: "Jun 9", count: 18 },
-      { date: "Jun 10", count: 20 },
-      { date: "Jun 11", count: 24 },
-      { date: "Jun 12", count: 30 }
-    ]);
+  setStats({
+    totalUsers: stats2.users.total_users,
+    activeSubscribers: stats2.subscriptions.total_subscribers,
+    mrr: stats2.mrr.current_mrr,
+    newSignupsLast7Days: stats2.users.users_this_week_count,
+    churnRate: 3.2,
+    unreadErrors: 5
+  });
 
-    setMrrData([
-      { month: "Jan", mrr: 3500 },
-      { month: "Feb", mrr: 3700 },
-      { month: "Mar", mrr: 4000 },
-      { month: "Apr", mrr: 4300 },
-      { month: "May", mrr: 4600 },
-      { month: "Jun", mrr: 4800 }
-    ]);
+  const userGrowthData = stats2.users.user_count_each_weekday.map(item => ({
+    day: item.weekday,
+    count: item.user_count
+  }));
+  setUserGrowth(userGrowthData);
 
-    setPlans([
-      { name: "Starter", value: 100, growth: 10, color: "#4F46E5" },
-      { name: "Pro", value: 60, growth: 25, color: "#10B981" },
-      { name: "Enterprise", value: 20, growth: 5, color: "#F59E0B" }
-    ]);
+  const MRRdata = stats2.mrr.mrr_by_month.map(item => ({
+    month: item.month,
+    mrr: item.mrr
+  }));
+  setMrrData(MRRdata);
 
-    setLogs([
-      { id: 1, action: "Login", by: "Sara", date: "2025-06-12" },
-      { id: 2, action: "Upgrade Plan", by: "Ayaan", date: "2025-06-11" },
-      { id: 3, action: "Delete Account", by: "Hira", date: "2025-06-10" }
-    ]);
+  setPlans(
+    stats2.subscriptions.top_subscriptions.map(plan => ({
+      name: plan.name,
+      value: plan.subscribers,
+      growth: Math.floor(Math.random() * 30),
+      color: "#4F46E5"
+    }))
+  );
 
-    setNotifications([
-      { id: 1, message: "Payment failed for Zayan", type: "error", date: "2025-06-12" },
-      { id: 2, message: "New signup: Hira", type: "success", date: "2025-06-11" },
-      { id: 3, message: "Subscription renewal due soon", type: "info", date: "2025-06-11" }
-    ]);
-  }, []);
+  setLogs(
+    stats2.audit_logs.map(log => ({
+      id: log.id,
+      action: log.action,
+      by: log.user__username,
+      date: log.created_at.split("T")[0]
+    }))
+  );
 
-  const trendingPlans = plans
-    .sort((a, b) => b.growth - a.growth)
+  setNotifications(
+    stats2.notifications.map(note => ({
+      id: note.id,
+      message: note.message,
+      type: note.type,
+      date: note.send_at ? note.send_at.split("T")[0] : "N/A"
+    }))
+  );
+
+}, [stats2]);
+
+
+  const trendingPlans = plans?.sort((a, b) => b.growth - a.growth)
     .slice(0, 2);
 
   return (
@@ -92,7 +99,7 @@ useEffect(() => {
         <Card title="User Growth">
           <ResponsiveContainer width="100%" height="90%">
             <LineChart data={userGrowth}>
-              <XAxis dataKey="date" />
+              <XAxis dataKey="day"/>
               <Tooltip />
               <Line type="monotone" dataKey="count" stroke="#4F46E5" strokeWidth={3} />
             </LineChart>
@@ -103,7 +110,7 @@ useEffect(() => {
           <ResponsiveContainer width="100%" height="90%">
             <PieChart>
               <Pie data={plans} dataKey="value" nameKey="name" outerRadius={80} label>
-                {plans.map((entry, index) => (
+                {plans?.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -125,20 +132,27 @@ useEffect(() => {
       </div>
 
       <Card title="Trending Plans (Growth%)">
-        <ul className="text-sm space-y-2 text-gray-700">
-          {trendingPlans.map((plan, i) => (
-            <li key={i} className="flex justify-between">
-              <span>{plan.name}</span>
-              <span className="font-semibold text-green-600">+{plan.growth}%</span>
-            </li>
+        <div className="space-y-3">
+          {trendingPlans?.map((plan, i) => (
+            <div key={i}>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium">{plan.name}</span>
+                <span className="text-sm font-semibold text-green-600">+{plan.growth}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded h-2">
+                <div
+                  className="h-2 rounded"
+                  style={{ width: `${plan.growth}%`, backgroundColor: plan.color }}
+                ></div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </Card>
-
      
       <Card title="Recent Notifications">
         <ul className="text-sm space-y-2 text-gray-700">
-          {notifications.map((n) => (
+          {notifications?.map((n) => (
             <li key={n.id} className={`flex justify-between items-center`}>
               <span>
                 <span className={`font-medium text-${n.type === "error" ? "red" : n.type === "success" ? "green" : "blue"}-600`}>
@@ -150,21 +164,21 @@ useEffect(() => {
           ))}
         </ul>
         <div className="mt-3 text-right">
-          <Link to="/notifications" className="text-sm text-blue-600 hover:underline">See All Notifications →</Link>
+          <Link to="notifications" className="text-sm text-blue-600 hover:underline">See All Notifications →</Link>
         </div>
       </Card>
 
       
       <Card title="Recent Audit Logs">
         <ul className="text-sm space-y-2 text-gray-700">
-          {logs.map((log) => (
+          {logs?.map((log) => (
             <li key={log.id}>
               <span className="font-medium">{log.by}</span> performed <span className="font-medium">{log.action}</span> on {log.date}
             </li>
           ))}
         </ul>
         <div className="mt-3 text-right">
-          <Link to="/audit-logs" className="text-sm text-blue-600 hover:underline">See All Logs →</Link>
+          <Link to="auditlogs" className="text-sm text-blue-600 hover:underline">See All Logs →</Link>
         </div>
       </Card>
     </div>

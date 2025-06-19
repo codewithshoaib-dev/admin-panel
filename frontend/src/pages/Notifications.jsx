@@ -55,83 +55,89 @@ export default function Notifications() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-  <div className="flex items-center justify-between mb-6">
-    <h2 className="text-xl font-semibold text-gray-800">Notifications</h2>
-    <Select
-      value={sortValue}
-      onValueChange={setSortValue}
-      options={sortOptions}
-      placeholder="Sort by..."
-    />
-  </div>
+  <div className="max-w-4xl mx-auto p-6">
+    <div className="flex items-center justify-between mb-8">
+      <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
+      <Select
+        value={sortValue}
+        onValueChange={setSortValue}
+        options={sortOptions}
+        placeholder="Sort by..."
+      />
+    </div>
 
-  <div className="flex gap-3 mb-6">
-    <button
-      onClick={() => setActiveSection("unread")}
-      className={`px-4 py-2 rounded-lg text-sm font-medium ${
-        activeSection === "unread"
-          ? "bg-blue-600 text-white"
-          : "bg-gray-100 text-gray-700"
-      }`}
-    >
-      Unread ({data.filter((n) => !n.read).length})
-    </button>
-    <button
-      onClick={() => setActiveSection("read")}
-      className={`px-4 py-2 rounded-lg text-sm font-medium ${
-        activeSection === "read"
-          ? "bg-blue-600 text-white"
-          : "bg-gray-100 text-gray-700"
-      }`}
-    >
-      Read ({data.filter((n) => n.read).length})
-    </button>
-  </div>
+    <div className="flex gap-3 mb-8">
+      <button
+        onClick={() => setActiveSection("unread")}
+        className={`px-4 py-2 rounded-lg text-sm font-medium border ${
+          activeSection === "unread"
+            ? "bg-blue-600 text-white border-blue-600"
+            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+        }`}
+      >
+        Unread ({data.filter((n) => !n.read).length})
+      </button>
+      <button
+        onClick={() => setActiveSection("read")}
+        className={`px-4 py-2 rounded-lg text-sm font-medium border ${
+          activeSection === "read"
+            ? "bg-blue-600 text-white border-blue-600"
+            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+        }`}
+      >
+        Read ({data.filter((n) => n.read).length})
+      </button>
+    </div>
 
-  {filteredNotifications.length === 0 ? (
-    <NoData message="No notifications to show" />
-  ) : (
-    <div className="flex flex-col space-y-4">
-      {filteredNotifications.map((notification) => (
-        <div
-          key={notification.id}
-          className={`flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition group ${
-            notification.read ? "bg-white" : "bg-blue-50"
-          }`}
-        >
-          <div className="p-2 rounded-full bg-gray-100 group-hover:bg-gray-200 transition">
-            {notification.read ? (
-              <CheckCircle2 className="text-green-500 w-5 h-5" />
-            ) : (
-              <CircleDot className="text-blue-500 w-5 h-5" />
-            )}
-          </div>
-
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="font-medium text-gray-800">{notification.title}</h4>
-              <span className="text-xs text-gray-400">
-                {formatDistanceToNow(new Date(notification.send_at), {
-                  addSuffix: true,
-                })}
-              </span>
+    {filteredNotifications.length === 0 ? (
+      <NoData message="No notifications to show" />
+    ) : (
+      <div className="flex flex-col space-y-4">
+        {filteredNotifications.map((notification) => (
+          <div
+            key={notification.id}
+            className={`flex items-start gap-4 p-5 rounded-2xl shadow-sm border transition group ${
+              notification.read
+                ? "bg-white border-gray-200 hover:bg-gray-50"
+                : "bg-blue-50 border-blue-100 hover:bg-blue-100"
+            }`}
+          >
+            <div className="p-3 rounded-full bg-white border border-gray-200 group-hover:bg-gray-100 transition">
+              {notification.read ? (
+                <CheckCircle2 className="text-green-500 w-5 h-5" />
+              ) : (
+                <CircleDot className="text-blue-500 w-5 h-5" />
+              )}
             </div>
 
-            <p className="text-sm text-gray-600">{notification.message}</p>
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="text-lg font-semibold text-gray-800">
+                  {notification.title}
+                </h4>
+                <span className="text-sm text-gray-400">
+                  {formatDistanceToNow(new Date(notification.send_at), {
+                    addSuffix: true,
+                  })}
+                </span>
+              </div>
+
+              <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+                {notification.message}
+              </p>
+            </div>
+
+            <button
+              onClick={() => handleDelete(notification.id)}
+              className="ml-auto text-gray-400 hover:text-red-500"
+            >
+              <Trash2 className="w-5 h-5" />
+            </button>
           </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
 
-          <button
-            onClick={() => handleDelete(notification.id)}
-            className="ml-auto text-gray-400 hover:text-red-500"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
-  );
 }

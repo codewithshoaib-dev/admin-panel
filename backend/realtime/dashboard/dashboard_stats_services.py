@@ -7,6 +7,9 @@ from django.db.models import Count, Sum
 from django.db.models.functions import ExtractWeekDay, TruncMonth
 from django.utils import timezone
 
+
+from dateutil.relativedelta import relativedelta
+
 User = get_user_model()
 
 
@@ -70,13 +73,16 @@ def get_top_subscription_plans():
     }
 
 
+
+
 def get_mrr_stats():
     now = timezone.now()
 
     mrr = UserSubscription.objects.aggregate(
         total_mrr=Sum('plan__price'))['total_mrr'] or 0
 
-    six_months_ago = now - timezone.timedelta(days=180)
+    six_months_ago = now - relativedelta(months=5)  
+
     mrr_by_month_qs = UserSubscription.objects.filter(
         created_at__gte=six_months_ago
     ).annotate(
@@ -85,17 +91,24 @@ def get_mrr_stats():
         mrr=Sum('plan__price')
     ).order_by('month')
 
+    
+    mrr_lookup = {entry['month'].strftime('%b %Y'): entry['mrr'] for entry in mrr_by_month_qs}
+
+
     mrr_by_month = []
-    for entry in mrr_by_month_qs:
+    for i in range(6):
+        month_date = (six_months_ago + relativedelta(months=i))
+        month_label = month_date.strftime('%b %Y')
         mrr_by_month.append({
-            'month': entry['month'].strftime('%B %Y'),
-            'mrr': entry['mrr']
+            'month': month_label,
+            'mrr': mrr_lookup.get(month_label, 0)
         })
 
     return {
         'current_mrr': mrr,
         'mrr_by_month': mrr_by_month
     }
+
 
 
 def get_important_notifications():

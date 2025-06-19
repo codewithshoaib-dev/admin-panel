@@ -53,7 +53,7 @@ import { useNavigate } from "react-router-dom";
         >
           <FaBars />
         </button>
-        <div className="text-lg font-semibold text-neutral-900 tracking-tight">Dashboard</div>
+        <div className="text-lg font-semibold text-neutral-900 tracking-tight">My Saas</div>
       </div>
 
       <div className="flex items-center gap-4">

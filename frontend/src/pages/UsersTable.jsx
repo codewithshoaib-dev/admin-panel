@@ -78,7 +78,7 @@ const UsersTable = () => {
     setIsSubmitting(true); 
     try {
       if (currentUser) {
-        await apiClient.put(`/users/${currentUser.id}/`, formValues);
+        await apiClient.patch(`/users/${currentUser.id}/`, formValues);
         toast.success("User updated!");
       } else {
         await apiClient.post(`/users/`, formValues);
@@ -125,8 +125,8 @@ const UsersTable = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <Loader />;
-  if (isError) return <ErrorMessage message="Error loading users" />;
+  if (isLoading || isRolesLoading) return <Loader />;
+  if (isError || isRolesError) return <ErrorMessage message="Error loading users" />;
 
   return (
   <div className="max-w-7xl mx-auto my-8 bg-white rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100">
