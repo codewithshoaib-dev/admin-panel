@@ -11,7 +11,7 @@ function AdminRoutes() {
   if (loading) return <Loader />; 
 
   if (!user) return <Navigate to="/login"/>;
-  console.log(user)
+ 
 
   if (!user.role === 'OWNER'|| !user.role === 'ADMIN' || !user.is_superuser) return <Navigate to="/unauthorized" />
 

@@ -5,6 +5,8 @@ import {
   LineChart, Line, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from "recharts";
 
+import useDashboardStatsSocket from "../hooks/useDashboardStatsSocket";
+
 const Dashboard = () => {
   const [stats, setStats] = useState({});
   const [userGrowth, setUserGrowth] = useState([]);
@@ -12,6 +14,15 @@ const Dashboard = () => {
   const [plans, setPlans] = useState([]);
   const [logs, setLogs] = useState([]);
   const [notifications, setNotifications] = useState([]);
+ 
+  const stats2 = useDashboardStatsSocket("ws://localhost:8000/ws/dashboard_stats/")
+
+  
+useEffect(() => {
+  if (stats2) {
+    console.log("Updated stats2:", stats2)
+  }
+}, [stats2])
 
   useEffect(() => {
     setStats({
@@ -67,7 +78,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen space-y-8">
-      {/* KPI Cards */}
+     
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <KpiCard label="Total Users" value={stats.totalUsers} icon={<FaUsers />} color="blue" />
         <KpiCard label="Subscribers" value={stats.activeSubscribers} icon={<FaChartLine />} color="green" />
@@ -76,9 +87,9 @@ const Dashboard = () => {
         <KpiCard label="Unread Errors" value={stats.unreadErrors} icon={<FaBell />} color="red" />
       </div>
 
-      {/* Charts */}
+     
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card title="User Growth (7d)">
+        <Card title="User Growth">
           <ResponsiveContainer width="100%" height="90%">
             <LineChart data={userGrowth}>
               <XAxis dataKey="date" />
@@ -113,7 +124,6 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Trending Plans */}
       <Card title="Trending Plans (Growth%)">
         <ul className="text-sm space-y-2 text-gray-700">
           {trendingPlans.map((plan, i) => (
@@ -125,7 +135,7 @@ const Dashboard = () => {
         </ul>
       </Card>
 
-      {/* Notifications */}
+     
       <Card title="Recent Notifications">
         <ul className="text-sm space-y-2 text-gray-700">
           {notifications.map((n) => (
@@ -144,7 +154,7 @@ const Dashboard = () => {
         </div>
       </Card>
 
-      {/* Audit Logs */}
+      
       <Card title="Recent Audit Logs">
         <ul className="text-sm space-y-2 text-gray-700">
           {logs.map((log) => (

@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 import uuid
 
-
-User = get_user_model()
+from django.conf import settings
 
 class SubscriptionPlans(models.Model):
 
@@ -14,7 +13,7 @@ class SubscriptionPlans(models.Model):
     billing_cycle = models.CharField(max_length=20, choices=[('MONTHLY', 'Monthly'), ('YEARLY','Yearly')])
     features = models.JSONField()
     is_active = models.BooleanField()
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_by', null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='created_by', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -22,7 +21,7 @@ class SubscriptionPlans(models.Model):
 
 class UserSubscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscribed_user')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscribed_user')
     plan = models.ForeignKey(SubscriptionPlans, on_delete=models.CASCADE, related_name='user_subscription')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()

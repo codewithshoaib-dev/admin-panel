@@ -4,7 +4,7 @@ import axios from "axios";
 
 const useAuthStore = create((set) => {
   const fetchUser = async () => {
-    console.log("fetchUser called");
+   
     try {
       const response = await apiClient.get("user-info");
       set({ user: response.data });

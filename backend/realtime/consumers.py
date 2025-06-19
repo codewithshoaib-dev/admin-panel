@@ -1,27 +1,44 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 import json
-from django.utils import timezone
-from datetime import timedelta
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from .dashboard.dashboard_stats_services import get_dashboard_stats
+from asgiref.sync import sync_to_async
 
-    
+from .dashboard.cleaneddata import clean_for_json
 
+class DashboardStatsConsumer(AsyncJsonWebsocketConsumer):
 
-class YourConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
-        await self.send(text_data=json.dumps())
+        await self.channel_layer.group_add("dashboard_stats", self.channel_name)
+
+        stats_data = await sync_to_async(get_dashboard_stats)()
+        cleaned_stats_data = clean_for_json(stats_data)
+
+       
+        await self.send_json(cleaned_stats_data)
 
 
+        await self.channel_layer.group_send(
+            "dashboard_stats",
+            {
+                "type": "send_dashboard_update",
+                "data": cleaned_stats_data
+            }
+        )
+
+        
     async def disconnect(self, close_code):
-        pass
+        await self.channel_layer.group_discard("dashboard_stats", self.channel_name)
+        print(f"Client disconnected: {self.channel_name}")
 
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        msg = text_data_json['message']
+    async def receive_json(self, content):
+        print(f"Received message: {content}")
 
-        await self.send(text_data=json.dumps({
-            'response': f'You sent: {msg}'
-        }))
+    async def send_dashboard_update(self, event):
+        data = event.get("data")
+        if data is not None:
+            cleanData = clean_for_json(data)
+            await self.send_json(data)
+        else:
+            print("No data in event")

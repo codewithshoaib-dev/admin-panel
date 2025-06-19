@@ -26,6 +26,9 @@ import ResetPassword from './pages/ResetPassword'
 
 import UnauthorizedPage from './pages/NotAuthorized'
 
+import MRRCard from './MRRcard'
+
+
 function App() {
    
   return(
@@ -34,11 +37,12 @@ function App() {
     
     <Routes>
       <Route path='login' element={<Login/>} />
+      <Route path='' element={<MRRCard/>} />
       <Route path='register' element={<Register/>} />
-      <Route path='forget-password' element={<ForgotPassword/>} />
-      <Route path='reset-password' element={<ResetPassword/>} />
+      <Route path='forgot-password' element={<ForgotPassword/>} />
+      <Route path='reset-password/:uid/:token' element={<ResetPassword/>} />
       <Route path='unauthorized' element={<UnauthorizedPage/>} />
-      
+      <Route path='not-found' element={<ContentNotFound/>}/>
 
       <Route path='*' element={<AdminRoutes/>}>
         <Route path='dashboard' element={<Layout />}>

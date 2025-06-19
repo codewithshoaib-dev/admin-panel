@@ -186,5 +186,16 @@ CORS_ALLOW_CREDENTIALS=True
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@domain.com'
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+FRONTEND_RESET_URL = env('FRONTEND_RESET_URL')
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+

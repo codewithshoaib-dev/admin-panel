@@ -84,7 +84,19 @@ const Login = () => {
           </div>
 
           {errors.non_field_errors && (
-            <p className="text-red-600 text-sm">{errors.non_field_errors[0]}</p>
+            <>
+              <p className="text-red-600 text-sm">{errors.non_field_errors[0]}</p>
+              {errors.non_field_errors[0] === "Invalid Credentials" && (
+                <div className="mt-2 text-center">
+                  <Link
+                    to="/forgot-password"
+                    className="text-indigo-600 text-sm hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
+            </>
           )}
 
           <button
