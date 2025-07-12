@@ -44,7 +44,6 @@ const UsersTable = () => {
   }
 };
 
-
   const handleSearchSubmit = () => {
     setSearchQuery(searchInput);
     setPage(1);
