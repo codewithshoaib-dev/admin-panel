@@ -34,19 +34,18 @@ export const refreshAccessToken = () => {
 
   isTokenRefreshing = true;
 
-  refreshPromise = apiClient
-    .post("token/refresh", {}, { withCredentials: true })
-    .then(() => {
-      processQueue();
-    })
-    .catch((err) => {
-      console.error("Token refresh failed:", err);
-      processQueue(err);
-    })
-    .finally(() => {
-      isTokenRefreshing = false;
-      refreshPromise = null;
-    });
+  try {
+     refreshPromise = apiClient.post("token/refresh")
+     processQueue()
+  }
+  catch(err){
+    processQueue(err)
+    console.error(err)
+  }
+  finally{
+    isTokenRefreshing = false
+  }
+    
 
   return refreshPromise;
 };

@@ -3,11 +3,11 @@ import apiClient from "../configs/axios";
 import axios from "axios";
 
 const useAuthStore = create((set) => {
-
+  
   const fetchUser = async () => {
    
     try {
-      const response = await axios.get("http://localhost:8000/api/user-info");
+      const response = await apiClient.get("user-info");
       set({ user: response.data });
     } catch(err) {
       console.error('error', err)
